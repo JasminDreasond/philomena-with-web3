@@ -52,13 +52,13 @@ Also, please make sure all versions are correct as well.
 
 ## Add Migration File
 
-    sudo docker exec philomena_app_1 mix ecto.gen.migration <file-name> -r Philomena.Repo
-    sudo docker exec philomena_app_1 mix ecto.migrate
+    sudo docker exec philomena-with-web3_app_1 mix ecto.gen.migration <file-name> -r Philomena.Repo
+    sudo docker exec philomena-with-web3_app_1 mix ecto.migrate
 
 ## Remove Migration File
     DELETE FROM public.schema_migrations WHERE version = [version]
 
 ## Access Postgres
 
-    sudo docker exec -it philomena_app_1 psql -h postgres -U postgres philomena_dev
+    sudo docker exec -it philomena-with-web3_app_1 psql -h postgres -U postgres philomena_dev
     \conninfo
