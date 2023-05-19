@@ -1,0 +1,22 @@
+[package]
+name = "philomena"
+version = "0.3.0"
+authors = ["Xe <https://github.com/Xe>", "Luna <https://github.com/Meow>", "Liam White <https://github.com/liamwhite>"]
+edition = "2021"
+
+[lib]
+name = "philomena"
+path = "src/lib.rs"
+crate-type = ["dylib"]
+
+[dependencies]
+comrak = { git = "https://github.com/philomena-dev/comrak", branch = "main" }
+jemallocator = { version = "0.5.0", features = ["disable_initial_exec_tls"] }
+rustler = "0.28"
+ring = "0.16"
+base64 = "0.21"
+url = "2.3"
+
+[profile.release]
+opt-level = 3
+lto = true
