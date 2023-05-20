@@ -4,48 +4,48 @@
 */
 
 const tokenList = [
-  ['fuzz', /^~(?:\d+(\.\d+)?|\.\d+)/],
-  ['boost', /^\^[-+]?\d+(\.\d+)?/],
-  ['quoted_lit', /^\s*"(?:[^"]|\\")+"/],
-  ['lparen', /^\s*\(\s*/],
-  ['rparen', /^\s*\)\s*/],
-  ['and_op', /^\s*(?:&&|AND)\s+/],
-  ['and_op', /^\s*,\s*/],
-  ['or_op', /^\s*(?:\|\||OR)\s+/],
-  ['not_op', /^\s*NOT(?:\s+|(?=\())/],
-  ['not_op', /^\s*[!-]\s*/],
-  ['space', /^\s+/],
-  ['word', /^(?:\\[\s,()^~]|[^\s,()^~])+/],
-  ['word', /^(?:\\[\s,()]|[^\s,()])+/]
-],
-  numberFields = ['id', 'width', 'height', 'aspect_ratio',
-    'comment_count', 'score', 'upvotes', 'downvotes',
-    'faves', 'tag_count'],
-  dateFields = ['created_at'],
-  literalFields = ['tags', 'orig_sha512_hash', 'sha512_hash',
-    'score', 'uploader', 'source_url', 'description'],
-  termSpaceToImageField = {
-    tags: 'data-image-tag-aliases',
-    score: 'data-score',
-    upvotes: 'data-upvotes',
-    downvotes: 'data-downvotes',
-    uploader: 'data-uploader',
-    // Yeah, I don't think this is reasonably supportable.
-    // faved_by: 'data-faved-by',
-    id: 'data-image-id',
-    width: 'data-width',
-    height: 'data-height',
-    /* eslint-disable camelcase */
-    aspect_ratio: 'data-aspect-ratio',
-    comment_count: 'data-comment-count',
-    tag_count: 'data-tag-count',
-    source_url: 'data-source-url',
-    faves: 'data-faves',
-    sha512_hash: 'data-sha512',
-    orig_sha512_hash: 'data-orig-sha512',
-    created_at: 'data-created-at'
-    /* eslint-enable camelcase */
-  };
+        ['fuzz', /^~(?:\d+(\.\d+)?|\.\d+)/],
+        ['boost', /^\^[-+]?\d+(\.\d+)?/],
+        ['quoted_lit', /^\s*"(?:[^"]|\\")+"/],
+        ['lparen', /^\s*\(\s*/],
+        ['rparen', /^\s*\)\s*/],
+        ['and_op', /^\s*(?:&&|AND)\s+/],
+        ['and_op', /^\s*,\s*/],
+        ['or_op', /^\s*(?:\|\||OR)\s+/],
+        ['not_op', /^\s*NOT(?:\s+|(?=\())/],
+        ['not_op', /^\s*[!-]\s*/],
+        ['space', /^\s+/],
+        ['word', /^(?:\\[\s,()^~]|[^\s,()^~])+/],
+        ['word', /^(?:\\[\s,()]|[^\s,()])+/]
+      ],
+      numberFields = ['id', 'width', 'height', 'aspect_ratio',
+        'comment_count', 'score', 'upvotes', 'downvotes',
+        'faves', 'tag_count'],
+      dateFields = ['created_at'],
+      literalFields = ['tags', 'orig_sha512_hash', 'sha512_hash',
+        'score', 'uploader', 'source_url', 'description'],
+      termSpaceToImageField = {
+        tags: 'data-image-tag-aliases',
+        score: 'data-score',
+        upvotes: 'data-upvotes',
+        downvotes: 'data-downvotes',
+        uploader: 'data-uploader',
+        // Yeah, I don't think this is reasonably supportable.
+        // faved_by: 'data-faved-by',
+        id: 'data-image-id',
+        width: 'data-width',
+        height: 'data-height',
+        /* eslint-disable camelcase */
+        aspect_ratio: 'data-aspect-ratio',
+        comment_count: 'data-comment-count',
+        tag_count: 'data-tag-count',
+        source_url: 'data-source-url',
+        faves: 'data-faves',
+        sha512_hash: 'data-sha512',
+        orig_sha512_hash: 'data-orig-sha512',
+        created_at: 'data-created-at'
+        /* eslint-enable camelcase */
+      };
 
 
 function SearchTerm(termStr) {
@@ -53,12 +53,12 @@ function SearchTerm(termStr) {
   this.parsed = false;
 }
 
-SearchTerm.prototype.append = function (substr) {
+SearchTerm.prototype.append = function(substr) {
   this.term += substr;
   this.parsed = false;
 };
 
-SearchTerm.prototype.parseRangeField = function (field) {
+SearchTerm.prototype.parseRangeField = function(field) {
   if (numberFields.indexOf(field) !== -1) {
     return [field, 'eq', 'number'];
   }
@@ -82,7 +82,7 @@ SearchTerm.prototype.parseRangeField = function (field) {
   return null;
 };
 
-SearchTerm.prototype.parseRelativeDate = function (dateVal, qual) {
+SearchTerm.prototype.parseRelativeDate = function(dateVal, qual) {
   const match = /(\d+) (second|minute|hour|day|week|month|year)s? ago/.exec(dateVal);
   const bounds = {
     second: 1000,
@@ -120,23 +120,23 @@ SearchTerm.prototype.parseRelativeDate = function (dateVal, qual) {
   }
 };
 
-SearchTerm.prototype.parseAbsoluteDate = function (dateVal, qual) {
+SearchTerm.prototype.parseAbsoluteDate = function(dateVal, qual) {
   const parseRes = [
-    /^(\d{4})/,
-    /^-(\d{2})/,
-    /^-(\d{2})/,
-    /^(?:\s+|T|t)(\d{2})/,
-    /^:(\d{2})/,
-    /^:(\d{2})/
-  ],
-    timeZoneOffset = [0, 0],
-    timeData = [0, 0, 1, 0, 0, 0],
-    origDateVal = dateVal;
+          /^(\d{4})/,
+          /^-(\d{2})/,
+          /^-(\d{2})/,
+          /^(?:\s+|T|t)(\d{2})/,
+          /^:(\d{2})/,
+          /^:(\d{2})/
+        ],
+        timeZoneOffset = [0, 0],
+        timeData = [0, 0, 1, 0, 0, 0],
+        origDateVal = dateVal;
   let topDate = null,
-    i,
-    match,
-    bottomDate = null,
-    localDateVal = origDateVal;
+      i,
+      match,
+      bottomDate = null,
+      localDateVal = origDateVal;
 
   match = /([+-])(\d{2}):(\d{2})$/.exec(localDateVal);
   if (match) {
@@ -202,7 +202,7 @@ SearchTerm.prototype.parseAbsoluteDate = function (dateVal, qual) {
   }
 };
 
-SearchTerm.prototype.parseDate = function (dateVal, qual) {
+SearchTerm.prototype.parseDate = function(dateVal, qual) {
   try {
     return this.parseAbsoluteDate(dateVal, qual);
   }
@@ -211,10 +211,10 @@ SearchTerm.prototype.parseDate = function (dateVal, qual) {
   }
 };
 
-SearchTerm.prototype.parse = function () {
+SearchTerm.prototype.parse = function() {
   let rangeParsing,
-    candidateTermSpace,
-    termCandidate;
+      candidateTermSpace,
+      termCandidate;
 
   this.wildcardable = !this.fuzz && !/^"([^"]|\\")+"$/.test(this.term);
 
@@ -269,11 +269,12 @@ SearchTerm.prototype.parse = function () {
     // A custom NFA with caching may be more sophisticated but not
     // likely to be faster.
     this.term = new RegExp(
-      `^${this.term.replace(/([.+^$[\]\\(){}|-])/g, '\\$1')
-        .replace(/([^\\]|[^\\](?:\\\\)+)\*/g, '$1.*')
-        .replace(/^(?:\\\\)*\*/g, '.*')
-        .replace(/([^\\]|[^\\](?:\\\\)+)\?/g, '$1.?')
-        .replace(/^(?:\\\\)*\?/g, '.?')
+      `^${
+        this.term.replace(/([.+^$[\]\\(){}|-])/g, '\\$1')
+          .replace(/([^\\]|[^\\](?:\\\\)+)\*/g, '$1.*')
+          .replace(/^(?:\\\\)*\*/g, '.*')
+          .replace(/([^\\]|[^\\](?:\\\\)+)\?/g, '$1.?')
+          .replace(/^(?:\\\\)*\?/g, '.?')
       }$`, 'i'
     );
   }
@@ -282,24 +283,24 @@ SearchTerm.prototype.parse = function () {
   this.parsed = true;
 };
 
-SearchTerm.prototype._normalizeTerm = function () {
+SearchTerm.prototype._normalizeTerm = function() {
   if (!this.wildcardable) {
     return this.term.replace('"', '"');
   }
   return this.term.replace(/\\([^*?])/g, '$1');
 };
 
-SearchTerm.prototype.fuzzyMatch = function (targetStr) {
+SearchTerm.prototype.fuzzyMatch = function(targetStr) {
   let targetDistance,
-    i,
-    j,
-    // Work vectors, representing the last three populated
-    // rows of the dynamic programming matrix of the iterative
-    // optimal string alignment calculation.
-    v0 = [],
-    v1 = [],
-    v2 = [],
-    temp;
+      i,
+      j,
+      // Work vectors, representing the last three populated
+      // rows of the dynamic programming matrix of the iterative
+      // optimal string alignment calculation.
+      v0 = [],
+      v1 = [],
+      v2 = [],
+      temp;
 
   if (this.fuzz < 1.0) {
     targetDistance = targetStr.length * (1.0 - this.fuzz);
@@ -327,7 +328,7 @@ SearchTerm.prototype.fuzzyMatch = function (targetStr) {
         v1[j] + cost
       );
       if (i > 1 && j > 1 && this.term[i] === targetStrLower[j - 1] &&
-        targetStrLower[i - 1] === targetStrLower[j]) {
+                    targetStrLower[i - 1] === targetStrLower[j]) {
         v2[j + 1] = Math.min(v2[j], v0[j - 1] + cost);
       }
     }
@@ -341,15 +342,15 @@ SearchTerm.prototype.fuzzyMatch = function (targetStr) {
   return v1[targetStrLower.length] <= targetDistance;
 };
 
-SearchTerm.prototype.exactMatch = function (targetStr) {
+SearchTerm.prototype.exactMatch = function(targetStr) {
   return this.term.toLowerCase() === targetStr.toLowerCase();
 };
 
-SearchTerm.prototype.wildcardMatch = function (targetStr) {
+SearchTerm.prototype.wildcardMatch = function(targetStr) {
   return this.term.test(targetStr);
 };
 
-SearchTerm.prototype.interactionMatch = function (imageID, type, interaction, interactions) {
+SearchTerm.prototype.interactionMatch = function(imageID, type, interaction, interactions) {
   let ret = false;
 
   interactions.forEach(v => {
@@ -361,13 +362,13 @@ SearchTerm.prototype.interactionMatch = function (imageID, type, interaction, in
   return ret;
 };
 
-SearchTerm.prototype.match = function (target) {
+SearchTerm.prototype.match = function(target) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias,consistent-this
   const ohffs = this;
   let ret = false,
-    compFunc,
-    numbuh,
-    date;
+      compFunc,
+      numbuh,
+      date;
 
   if (!this.parsed) {
     this.parse();
@@ -454,7 +455,7 @@ SearchTerm.prototype.match = function (target) {
     }
     else if (this.fuzz) {
       ret = this.term <= numbuh + this.fuzz &&
-        this.term + this.fuzz >= numbuh;
+                  this.term + this.fuzz >= numbuh;
     }
     else {
       switch (this.compare) {
@@ -481,30 +482,30 @@ SearchTerm.prototype.match = function (target) {
 
 function generateLexArray(searchStr) {
   const opQueue = [],
-    groupNegate = [],
-    tokenStack = [];
+        groupNegate = [],
+        tokenStack = [];
   let searchTerm = null,
-    boost = null,
-    fuzz = null,
-    lparenCtr = 0,
-    negate = false,
-    boostFuzzStr = '',
-    localSearchStr = searchStr;
+      boost = null,
+      fuzz = null,
+      lparenCtr = 0,
+      negate = false,
+      boostFuzzStr = '',
+      localSearchStr = searchStr;
 
   while (localSearchStr.length > 0) {
     // eslint-disable-next-line no-loop-func
     tokenList.every(tokenArr => {
       const tokenName = tokenArr[0],
-        tokenRE = tokenArr[1];
+            tokenRE = tokenArr[1];
       let match = tokenRE.exec(localSearchStr),
-        op;
+          op;
 
       if (match) {
         match = match[0];
 
         if (Boolean(searchTerm) && (
           ['and_op', 'or_op'].indexOf(tokenName) !== -1 ||
-          tokenName === 'rparen' && lparenCtr === 0)) {
+                        tokenName === 'rparen' && lparenCtr === 0)) {
           // Set options.
           searchTerm.boost = boost;
           searchTerm.fuzz = fuzz;
@@ -654,7 +655,7 @@ function generateLexArray(searchStr) {
   }
 
   if (opQueue.indexOf('rparen') !== -1 ||
-    opQueue.indexOf('lparen') !== -1) {
+            opQueue.indexOf('lparen') !== -1) {
     throw new Error('Mismatched parentheses.');
   }
 
@@ -743,15 +744,15 @@ function combineOperands(ast1, ast2, parentAST) {
 }
 
 // Evaluation of the AST in regard to a target image
-SearchAST.prototype.hitsImage = function (image) {
+SearchAST.prototype.hitsImage = function(image) {
   const treeStack = [];
   // Left side node.
   // eslint-disable-next-line @typescript-eslint/no-this-alias,consistent-this
   let ast1 = this,
-    // Right side node.
-    ast2,
-    // Parent node of the current subtree.
-    parentAST;
+      // Right side node.
+      ast2,
+      // Parent node of the current subtree.
+      parentAST;
 
   // Build the initial tree node traversal stack, of the "far left" side.
   // The general idea is to accumulate from the bottom and make stacks
@@ -836,14 +837,14 @@ SearchAST.prototype.hitsImage = function (image) {
   return ast1;
 };
 
-SearchAST.prototype.dumpTree = function () {
+SearchAST.prototype.dumpTree = function() {
   // Dumps to string a simple diagram of the syntax tree structure
   // (starting with this object as the root) for debugging purposes.
   const retStrArr = [],
-    treeQueue = [['', this]];
+        treeQueue = [['', this]];
   let treeArr,
-    prefix,
-    tree;
+      prefix,
+      tree;
 
   while (treeQueue.length > 0) {
     treeArr = treeQueue.shift();
